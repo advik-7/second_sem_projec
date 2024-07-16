@@ -1,0 +1,352 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array,load_img
+from PIL import Image
+test_path= "fruits/fruits-360_dataset/fruits-360/Test"
+train_path= "fruits/fruits-360_dataset/fruits-360/Training"
+img = Image.open("fruits/fruits-360_dataset/fruits-360/Training/Beetroot/100_100.jpg")
+shape_of_image = img_to_array(img)
+model = keras.Sequential()
+model.add(Conv2D(32,(3,3),activation = 'relu', input_shape = shape_of_image.shape))
+model.add(MaxPooling2D())
+​
+model.add(Conv2D(32,(3,3),activation = 'relu', input_shape = shape_of_image.shape))
+model.add(MaxPooling2D())
+​
+model.add(Conv2D(64,(3,3),activation = 'relu', input_shape = shape_of_image.shape))
+model.add(MaxPooling2D())
+model.add(Flatten())
+model.add(Dense(1024,activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(131,activation = 'softmax'))
+   
+C:\Users\hp\anaconda3\Lib\site-packages\keras\src\layers\convolutional\base_conv.py:107: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+model.compile(loss = 'categorical_crossentropy',
+              optimizer = 'rmsprop',
+              metrics = ['accuracy'])
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+train_datagen = ImageDataGenerator(rotation_range=20,shear_range=0.3, zoom_range=0.2,
+                             horizontal_flip=True, fill_mode='nearest')
+train_generator=train_datagen.flow_from_directory(train_path,target_size=(100,100),color_mode='rgb',class_mode='categorical')
+​
+​
+Found 67692 images belonging to 131 classes.
+hist=model.fit(x=train_generator, 
+                   steps_per_epoch = 50,
+                   epochs = 100,
+                   validation_data =train_generator,
+                   validation_steps = 100//50)
+​
+Epoch 1/100
+C:\Users\hp\anaconda3\Lib\site-packages\keras\src\trainers\data_adapters\py_dataset_adapter.py:120: UserWarning: Your `PyDataset` class should call `super().__init__(**kwargs)` in its constructor. `**kwargs` can include `workers`, `use_multiprocessing`, `max_queue_size`. Do not pass these arguments to `fit()`, as they will be ignored.
+  self._warn_if_super_not_called()
+50/50 ━━━━━━━━━━━━━━━━━━━━ 32s 519ms/step - accuracy: 0.0225 - loss: 51.3277 - val_accuracy: 0.1562 - val_loss: 4.3023
+Epoch 2/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 449ms/step - accuracy: 0.0644 - loss: 4.8990 - val_accuracy: 0.1250 - val_loss: 4.2143
+Epoch 3/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 443ms/step - accuracy: 0.0769 - loss: 5.0574 - val_accuracy: 0.2031 - val_loss: 3.6316
+Epoch 4/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 444ms/step - accuracy: 0.0966 - loss: 5.3235 - val_accuracy: 0.1094 - val_loss: 4.1913
+Epoch 5/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 436ms/step - accuracy: 0.1529 - loss: 3.9836 - val_accuracy: 0.1875 - val_loss: 3.6881
+Epoch 6/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 440ms/step - accuracy: 0.1813 - loss: 3.9903 - val_accuracy: 0.2656 - val_loss: 2.8729
+Epoch 7/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 434ms/step - accuracy: 0.2282 - loss: 3.9819 - val_accuracy: 0.2812 - val_loss: 2.8774
+Epoch 8/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 426ms/step - accuracy: 0.2783 - loss: 3.1487 - val_accuracy: 0.3906 - val_loss: 2.2740
+Epoch 9/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 440ms/step - accuracy: 0.3094 - loss: 3.0027 - val_accuracy: 0.4531 - val_loss: 2.0199
+Epoch 10/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 438ms/step - accuracy: 0.3345 - loss: 2.8664 - val_accuracy: 0.5000 - val_loss: 1.6664
+Epoch 11/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 438ms/step - accuracy: 0.3845 - loss: 2.5332 - val_accuracy: 0.4844 - val_loss: 1.6998
+Epoch 12/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 421ms/step - accuracy: 0.4060 - loss: 2.4533 - val_accuracy: 0.5938 - val_loss: 1.5133
+Epoch 13/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 426ms/step - accuracy: 0.4666 - loss: 2.1000 - val_accuracy: 0.6875 - val_loss: 0.9823
+Epoch 14/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 421ms/step - accuracy: 0.4952 - loss: 2.1099 - val_accuracy: 0.6562 - val_loss: 1.2789
+Epoch 15/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 424ms/step - accuracy: 0.5385 - loss: 1.8438 - val_accuracy: 0.5469 - val_loss: 1.5220
+Epoch 16/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 423ms/step - accuracy: 0.5883 - loss: 1.4813 - val_accuracy: 0.7344 - val_loss: 0.7664
+Epoch 17/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 417ms/step - accuracy: 0.5957 - loss: 1.6684 - val_accuracy: 0.7344 - val_loss: 1.3352
+Epoch 18/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 415ms/step - accuracy: 0.5863 - loss: 1.7075 - val_accuracy: 0.7969 - val_loss: 0.9153
+Epoch 19/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 412ms/step - accuracy: 0.6239 - loss: 1.4817 - val_accuracy: 0.7812 - val_loss: 0.8789
+Epoch 20/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 417ms/step - accuracy: 0.6191 - loss: 1.3435 - val_accuracy: 0.7500 - val_loss: 0.6507
+Epoch 21/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 431ms/step - accuracy: 0.6671 - loss: 1.3279 - val_accuracy: 0.7344 - val_loss: 0.8461
+Epoch 22/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 414ms/step - accuracy: 0.6626 - loss: 1.2685 - val_accuracy: 0.8438 - val_loss: 0.5233
+Epoch 23/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 413ms/step - accuracy: 0.7010 - loss: 1.1577 - val_accuracy: 0.7812 - val_loss: 0.9843
+Epoch 24/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 410ms/step - accuracy: 0.7036 - loss: 1.1017 - val_accuracy: 0.8281 - val_loss: 0.6958
+Epoch 25/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 426ms/step - accuracy: 0.6835 - loss: 1.1442 - val_accuracy: 0.8281 - val_loss: 0.5943
+Epoch 26/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 406ms/step - accuracy: 0.7348 - loss: 1.0933 - val_accuracy: 0.7344 - val_loss: 0.7872
+Epoch 27/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 407ms/step - accuracy: 0.6933 - loss: 1.1663 - val_accuracy: 0.8125 - val_loss: 0.4773
+Epoch 28/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 421ms/step - accuracy: 0.7385 - loss: 0.9160 - val_accuracy: 0.7031 - val_loss: 0.8092
+Epoch 29/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 412ms/step - accuracy: 0.7012 - loss: 1.2255 - val_accuracy: 0.7344 - val_loss: 0.9626
+Epoch 30/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 406ms/step - accuracy: 0.7323 - loss: 1.0286 - val_accuracy: 0.8281 - val_loss: 0.7678
+Epoch 31/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 410ms/step - accuracy: 0.7508 - loss: 0.9106 - val_accuracy: 0.8750 - val_loss: 0.4343
+Epoch 32/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 401ms/step - accuracy: 0.7825 - loss: 0.8085 - val_accuracy: 0.8281 - val_loss: 0.4365
+Epoch 33/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 406ms/step - accuracy: 0.8083 - loss: 0.7066 - val_accuracy: 0.9219 - val_loss: 0.3284
+Epoch 34/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 413ms/step - accuracy: 0.7749 - loss: 0.9040 - val_accuracy: 0.8125 - val_loss: 0.5574
+Epoch 35/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 407ms/step - accuracy: 0.8011 - loss: 0.7546 - val_accuracy: 0.8281 - val_loss: 0.4847
+Epoch 36/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 408ms/step - accuracy: 0.7779 - loss: 0.8508 - val_accuracy: 0.8281 - val_loss: 0.4824
+Epoch 37/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 405ms/step - accuracy: 0.7588 - loss: 0.8180 - val_accuracy: 0.8906 - val_loss: 0.2391
+Epoch 38/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 23s 468ms/step - accuracy: 0.7890 - loss: 0.7698 - val_accuracy: 0.8281 - val_loss: 0.5891
+Epoch 39/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 448ms/step - accuracy: 0.7834 - loss: 0.8796 - val_accuracy: 0.9531 - val_loss: 0.2868
+Epoch 40/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 438ms/step - accuracy: 0.7992 - loss: 0.8123 - val_accuracy: 0.8750 - val_loss: 0.4659
+Epoch 41/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 448ms/step - accuracy: 0.7830 - loss: 0.8871 - val_accuracy: 0.9062 - val_loss: 0.3432
+Epoch 42/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 438ms/step - accuracy: 0.8010 - loss: 0.7791 - val_accuracy: 0.7812 - val_loss: 0.6231
+Epoch 43/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 5s 102ms/step - accuracy: 0.8429 - loss: 0.5977 - val_accuracy: 0.9844 - val_loss: 0.1061
+Epoch 44/100
+C:\Users\hp\anaconda3\Lib\contextlib.py:155: UserWarning: Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches. You may need to use the `.repeat()` function when building your dataset.
+  self.gen.throw(typ, value, traceback)
+50/50 ━━━━━━━━━━━━━━━━━━━━ 25s 451ms/step - accuracy: 0.8318 - loss: 0.6990 - val_accuracy: 0.8594 - val_loss: 0.4612
+Epoch 45/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 23s 451ms/step - accuracy: 0.7994 - loss: 0.8414 - val_accuracy: 0.8906 - val_loss: 0.2752
+Epoch 46/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 24s 484ms/step - accuracy: 0.8338 - loss: 0.6087 - val_accuracy: 0.7969 - val_loss: 0.6602
+Epoch 47/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 27s 550ms/step - accuracy: 0.8229 - loss: 0.6874 - val_accuracy: 0.9219 - val_loss: 0.2285
+Epoch 48/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 25s 497ms/step - accuracy: 0.8199 - loss: 0.7621 - val_accuracy: 0.8906 - val_loss: 0.3314
+Epoch 49/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 23s 470ms/step - accuracy: 0.8307 - loss: 0.6711 - val_accuracy: 0.8906 - val_loss: 0.1999
+Epoch 50/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 24s 474ms/step - accuracy: 0.8260 - loss: 0.6816 - val_accuracy: 0.9219 - val_loss: 0.2391
+Epoch 51/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 23s 470ms/step - accuracy: 0.8340 - loss: 0.6814 - val_accuracy: 0.9375 - val_loss: 0.2621
+Epoch 52/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 448ms/step - accuracy: 0.8264 - loss: 0.7794 - val_accuracy: 0.9531 - val_loss: 0.2761
+Epoch 53/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 447ms/step - accuracy: 0.8419 - loss: 0.6813 - val_accuracy: 0.8906 - val_loss: 0.3176
+Epoch 54/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 428ms/step - accuracy: 0.8388 - loss: 0.6756 - val_accuracy: 0.7812 - val_loss: 0.9919
+Epoch 55/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 431ms/step - accuracy: 0.8105 - loss: 0.7966 - val_accuracy: 0.8438 - val_loss: 0.4698
+Epoch 56/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 422ms/step - accuracy: 0.8481 - loss: 0.6746 - val_accuracy: 0.9375 - val_loss: 0.2559
+Epoch 57/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 426ms/step - accuracy: 0.8584 - loss: 0.5609 - val_accuracy: 0.9375 - val_loss: 0.2156
+Epoch 58/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 420ms/step - accuracy: 0.8371 - loss: 0.7430 - val_accuracy: 0.9219 - val_loss: 0.2280
+Epoch 59/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 444ms/step - accuracy: 0.8234 - loss: 0.7427 - val_accuracy: 0.9219 - val_loss: 0.4847
+Epoch 60/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 424ms/step - accuracy: 0.8308 - loss: 0.7141 - val_accuracy: 0.9219 - val_loss: 0.2359
+Epoch 61/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 441ms/step - accuracy: 0.8415 - loss: 0.6857 - val_accuracy: 0.8125 - val_loss: 0.8724
+Epoch 62/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 425ms/step - accuracy: 0.8484 - loss: 0.6711 - val_accuracy: 0.8906 - val_loss: 0.3882
+Epoch 63/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 419ms/step - accuracy: 0.8297 - loss: 0.6841 - val_accuracy: 0.8750 - val_loss: 0.5105
+Epoch 64/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 415ms/step - accuracy: 0.8344 - loss: 0.7648 - val_accuracy: 0.9375 - val_loss: 0.2319
+Epoch 65/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 427ms/step - accuracy: 0.8710 - loss: 0.5195 - val_accuracy: 0.9688 - val_loss: 0.1246
+Epoch 66/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 412ms/step - accuracy: 0.8535 - loss: 0.6030 - val_accuracy: 0.9219 - val_loss: 0.2260
+Epoch 67/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 414ms/step - accuracy: 0.8552 - loss: 0.9416 - val_accuracy: 1.0000 - val_loss: 0.0475
+Epoch 68/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 414ms/step - accuracy: 0.8635 - loss: 0.7038 - val_accuracy: 0.8750 - val_loss: 0.4572
+Epoch 69/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 416ms/step - accuracy: 0.8417 - loss: 0.6824 - val_accuracy: 0.9219 - val_loss: 0.2502
+Epoch 70/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 413ms/step - accuracy: 0.8822 - loss: 0.5487 - val_accuracy: 0.9531 - val_loss: 0.1417
+Epoch 71/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 407ms/step - accuracy: 0.8541 - loss: 0.7003 - val_accuracy: 0.9219 - val_loss: 0.2111
+Epoch 72/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 419ms/step - accuracy: 0.8635 - loss: 0.6049 - val_accuracy: 0.9219 - val_loss: 0.2962
+Epoch 73/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 412ms/step - accuracy: 0.8783 - loss: 0.5274 - val_accuracy: 0.9062 - val_loss: 0.5264
+Epoch 74/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 412ms/step - accuracy: 0.8560 - loss: 0.8191 - val_accuracy: 0.9531 - val_loss: 0.1006
+Epoch 75/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 405ms/step - accuracy: 0.8528 - loss: 0.6950 - val_accuracy: 0.8750 - val_loss: 0.9379
+Epoch 76/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 21s 416ms/step - accuracy: 0.8684 - loss: 0.5571 - val_accuracy: 0.9688 - val_loss: 0.1464
+Epoch 77/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 408ms/step - accuracy: 0.8743 - loss: 0.5020 - val_accuracy: 0.9375 - val_loss: 0.1717
+Epoch 78/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 408ms/step - accuracy: 0.8597 - loss: 0.6190 - val_accuracy: 0.9688 - val_loss: 0.0611
+Epoch 79/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 409ms/step - accuracy: 0.8635 - loss: 0.6371 - val_accuracy: 0.9688 - val_loss: 0.0741
+Epoch 80/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 407ms/step - accuracy: 0.8804 - loss: 0.5276 - val_accuracy: 0.8438 - val_loss: 0.5353
+Epoch 81/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 407ms/step - accuracy: 0.8574 - loss: 0.5954 - val_accuracy: 0.9531 - val_loss: 0.1002
+Epoch 82/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 402ms/step - accuracy: 0.8783 - loss: 0.5575 - val_accuracy: 0.9219 - val_loss: 0.2600
+Epoch 83/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 403ms/step - accuracy: 0.8759 - loss: 0.5511 - val_accuracy: 0.9219 - val_loss: 0.1959
+Epoch 84/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 400ms/step - accuracy: 0.8665 - loss: 0.6482 - val_accuracy: 0.9844 - val_loss: 0.0523
+Epoch 85/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 403ms/step - accuracy: 0.9008 - loss: 0.4106 - val_accuracy: 0.9219 - val_loss: 0.1924
+Epoch 86/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 5s 101ms/step - accuracy: 0.9099 - loss: 0.3368 - val_accuracy: 0.9375 - val_loss: 0.1960
+Epoch 87/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 22s 406ms/step - accuracy: 0.8801 - loss: 0.6309 - val_accuracy: 0.9375 - val_loss: 0.4233
+Epoch 88/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 403ms/step - accuracy: 0.8918 - loss: 0.4690 - val_accuracy: 0.9219 - val_loss: 0.2877
+Epoch 89/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 408ms/step - accuracy: 0.8975 - loss: 0.4439 - val_accuracy: 0.8594 - val_loss: 1.4532
+Epoch 90/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 400ms/step - accuracy: 0.8715 - loss: 0.5545 - val_accuracy: 0.9688 - val_loss: 0.0910
+Epoch 91/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 401ms/step - accuracy: 0.8802 - loss: 0.6446 - val_accuracy: 0.9375 - val_loss: 0.1081
+Epoch 92/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 405ms/step - accuracy: 0.8851 - loss: 0.6034 - val_accuracy: 0.9375 - val_loss: 0.2435
+Epoch 93/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 404ms/step - accuracy: 0.8998 - loss: 0.4462 - val_accuracy: 1.0000 - val_loss: 0.0349
+Epoch 94/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 399ms/step - accuracy: 0.8895 - loss: 0.5224 - val_accuracy: 0.9062 - val_loss: 0.2797
+Epoch 95/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 403ms/step - accuracy: 0.8968 - loss: 0.4529 - val_accuracy: 0.8906 - val_loss: 0.3685
+Epoch 96/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 401ms/step - accuracy: 0.8976 - loss: 0.4459 - val_accuracy: 0.9531 - val_loss: 0.3760
+Epoch 97/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 399ms/step - accuracy: 0.8670 - loss: 0.6214 - val_accuracy: 0.8906 - val_loss: 0.7715
+Epoch 98/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 397ms/step - accuracy: 0.8937 - loss: 0.7167 - val_accuracy: 0.9531 - val_loss: 0.0985
+Epoch 99/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 396ms/step - accuracy: 0.8893 - loss: 0.5377 - val_accuracy: 0.9844 - val_loss: 0.0375
+Epoch 100/100
+50/50 ━━━━━━━━━━━━━━━━━━━━ 20s 403ms/step - accuracy: 0.8802 - loss: 0.5579 - val_accuracy: 0.9062 - val_loss: 0.3789
+model.summary()
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ conv2d (Conv2D)                      │ (None, 98, 98, 32)          │             896 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling2d (MaxPooling2D)         │ (None, 49, 49, 32)          │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv2d_1 (Conv2D)                    │ (None, 47, 47, 32)          │           9,248 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling2d_1 (MaxPooling2D)       │ (None, 23, 23, 32)          │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv2d_2 (Conv2D)                    │ (None, 21, 21, 64)          │          18,496 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling2d_2 (MaxPooling2D)       │ (None, 10, 10, 64)          │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ flatten (Flatten)                    │ (None, 6400)                │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ (None, 1024)                │       6,554,624 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 1024)                │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 131)                 │         134,275 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 13,435,080 (51.25 MB)
+ Trainable params: 6,717,539 (25.63 MB)
+ Non-trainable params: 0 (0.00 B)
+ Optimizer params: 6,717,541 (25.63 MB)
+model.save_weights("staiml_project(3).weights.h5")
+print(hist.history.keys())
+plt.plot(hist.history["loss"],label = "Train Loss")
+plt.plot(hist.history["val_loss"],label = "Validaton Loss")
+plt.legend()
+plt.show()
+dict_keys(['accuracy', 'loss', 'val_accuracy', 'val_loss'])
+
+plt.plot(hist.history["accuracy"],label = "accuracy")
+plt.plot(hist.history["val_accuracy"],label = "Validaton accuracy")
+plt.legend()
+plt.show()
+
+from PIL import Image
+img = Image.open("trial.jpg")
+img.show()
+​
+from tensorflow.keras.preprocessing import image
+​
+trial = image.load_img('trial.jpg', target_size=(100, 100))  # Adjust target_size according to your model's input shape
+trial_array = image.img_to_array(trial)  
+trial_array = np.expand_dims(trial_array, axis=0) 
+predict=model.predict(trial_array)
+print(predict)
+1/1 ━━━━━━━━━━━━━━━━━━━━ 0s 426ms/step
+[[8.42545717e-07 8.42819718e-05 4.45133628e-06 3.41186222e-07
+  2.97033639e-05 3.46388617e-07 6.13702118e-01 2.86608156e-07
+  3.43201964e-06 1.72944465e-06 5.61709099e-12 4.11998187e-08
+  9.16133402e-04 1.31973832e-06 1.54913271e-09 1.56850588e-09
+  1.56286067e-10 3.54373975e-10 1.52293456e-10 5.85947760e-07
+  1.02405515e-08 3.90088424e-08 2.56103177e-11 1.95449665e-08
+  4.09799486e-06 2.09139799e-07 3.92570731e-09 1.45523094e-09
+  9.47034048e-11 5.12843741e-08 1.61458402e-08 2.16728139e-07
+  9.37863120e-10 2.35739206e-09 1.38249831e-07 4.73422652e-08
+  3.07789327e-09 4.65882238e-07 5.61383386e-05 3.24276539e-09
+  2.63237165e-08 6.10892386e-08 1.29280234e-04 1.92484961e-07
+  4.63886457e-10 6.13259914e-08 3.96178174e-10 1.30237520e-12
+  2.53352517e-09 7.57159047e-09 1.93310452e-08 1.07772237e-07
+  4.33293135e-09 5.29741229e-08 9.05167763e-09 1.37711231e-09
+  5.57665480e-04 4.71260864e-06 3.06675929e-09 7.48184902e-06
+  7.12156278e-10 2.16580776e-09 2.98941899e-07 1.95798293e-07
+  3.96600175e-09 3.34997385e-05 2.31116228e-08 2.50089532e-10
+  7.80166829e-08 7.64714569e-10 2.22855124e-06 3.56132514e-05
+  1.30560875e-04 2.10118674e-06 1.69457853e-05 4.77847673e-09
+  2.31429120e-03 3.78991012e-06 1.18861055e-06 8.58804486e-11
+  6.00088533e-05 5.62720629e-07 3.62783492e-01 7.24554920e-05
+  2.57394822e-05 6.89722146e-09 4.74661783e-06 4.69228034e-08
+  5.60587384e-12 1.98614962e-05 7.38387982e-08 3.41648310e-09
+  3.69778057e-08 1.56311266e-08 1.55578377e-08 4.15189945e-08
+  1.87164528e-06 6.56604285e-12 1.68669245e-11 6.87287471e-09
+  9.37963263e-10 1.72406034e-09 1.63824687e-08 4.25843938e-09
+  9.24236616e-08 4.03408755e-08 1.95489189e-08 2.26589548e-03
+  2.38599496e-05 9.99393407e-04 1.56619735e-02 1.21755261e-09
+  2.27578134e-09 3.94724076e-09 9.32583610e-09 2.73192384e-08
+  5.41764003e-08 4.74716932e-10 1.93686067e-09 3.10890230e-10
+  4.76054447e-06 6.46420872e-08 1.35915082e-06 2.75055925e-07
+  1.89585125e-09 1.14704608e-06 2.44308067e-05 2.12121067e-11
+  1.98492622e-09 3.38658843e-08 3.95354220e-08]]
+i=np.argmax(predict)
+print(i)
+6
+import os
+​
+folder = "fruits/fruits-360_dataset/fruits-360/Training"
+sub_folders = [name for name in os.listdir(folder) if os.path.isdir(os.path.join(folder, name))]
+​
+print(sub_folders[i])
+​
+Apple Pink Lady
+for i in sub_folders:
+    print(i)
